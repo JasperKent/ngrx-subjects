@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { BookReview } from './book-review';
 
@@ -8,19 +9,19 @@ import { BookReview } from './book-review';
 })
 export class BookReviewRepositoryService {
 
-  private reviews: BookReview[] = [];
+  private reviews$ = new ReplaySubject<BookReview[]>();
 
   private loadReviews(): void {
     this.httpClient.get<BookReview[]>(`${environment.booksUri}/BookReview`)
-      .subscribe (result => this.reviews = result);
+    .subscribe(reviews => this.reviews$.next(reviews));
   }
 
   constructor (private httpClient: HttpClient){
     this.loadReviews();
   }
 
-  getReviews (): BookReview[] {
-    return this.reviews;
+  getReviews (): Observable<BookReview[]> {
+    return this.reviews$;
   }
 
   addReview (review: BookReview): void{

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { BookReview } from '../services/book-review';
 import { BookReviewRepositoryService } from '../services/book-review-repository.service';
 
@@ -11,9 +12,7 @@ export class AllReviewsComponent  {
 
   showAdd = false;
 
-  get reviews():  BookReview[]{
-    return this.bookReviewRepositoryService.getReviews();
-  }
+  reviews= this.bookReviewRepositoryService.getReviews();
 
   constructor(private bookReviewRepositoryService: BookReviewRepositoryService) { }
 
